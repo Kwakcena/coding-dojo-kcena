@@ -1,12 +1,4 @@
-const solution = (arr) => {
-  const answer = [];
-  for(let i = 0, j = 1; i < arr.length; i++, j++) {
-    if(arr[i] !== arr[j]) {
-      answer.push(arr[i]);
-    }
-  }
-  return answer;
-}
+const solution = (arr) => arr.filter((number, index) => number !== arr[index + 1]);
 
 test('solution', () => {
   expect(solution([1, 1, 3, 3, 0, 1, 1])).toEqual([1, 3, 0, 1]);
