@@ -1,6 +1,5 @@
 const solution = (a, b) => {
-  return a.map((value, index) => value * b[index])
-    .reduce((total, number) => (total + number), 0);
+  return a.reduce((acc, value, index) => acc += value * b[index], 0);
 }
 
 test('solution', () => {
