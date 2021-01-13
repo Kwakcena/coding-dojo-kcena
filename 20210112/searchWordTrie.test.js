@@ -15,18 +15,18 @@ class Trie {
     this.root = new Node();
   }
 
-  add(word, index, node = this.root) {
+  add(word) {
+    let node = this.root;
+
     node.total++;
-    if (index === word.length) {
-      node.setEnd();
-      return;
-    }
+    for (const letter of word) {
+      if (!node.keys.has(letter)) {
+        node.keys.set(letter, new Node());
+      }
 
-    if (!node.keys.has(word[index])) {
-      node.keys.set(word[index], new Node());
+      node = node.keys.get(letter);
+      node.total++;
     }
-
-    return this.add(word, index + 1, node.keys.get(word[index]));
   }
 
   getTotal(word) {
@@ -55,8 +55,8 @@ const solution = (words, queries) => {
       suffixTrie[length] = new Trie();
     }
 
-    prefixTrie[length].add(word, 0);
-    suffixTrie[length].add(reverseString(word), 0);
+    prefixTrie[length].add(word);
+    suffixTrie[length].add(reverseString(word));
   }
 
   return queries.map((q) => {
@@ -75,14 +75,14 @@ const solution = (words, queries) => {
 const reverseString = (s) => s.split('').reverse().join('');
 
 describe('Trie 자료구조로 푸는 가사 검색 문제', () => {
-  // it('solution', () => {
-  //   expect(
-  //     solution(
-  //       ['frodo', 'front', 'frost', 'frozen', 'frame', 'kakao'],
-  //       ['fro??', '????o', 'fr???', 'fro???', 'pro?']
-  //     )
-  //   ).toEqual([3, 2, 4, 1, 0]);
-  // });
+  it('solution', () => {
+    expect(
+      solution(
+        ['frodo', 'front', 'frost', 'frozen', 'frame', 'kakao'],
+        ['fro??', '????o', 'fr???', 'fro???', 'pro?']
+      )
+    ).toEqual([3, 2, 4, 1, 0]);
+  });
 
   it('문자열 뒤집기', () => {
     expect(reverseString('????o')).toBe('o????');
@@ -92,7 +92,7 @@ describe('Trie 자료구조로 푸는 가사 검색 문제', () => {
   it('일부 단어가 포함된 단어의 개수를 구한다', () => {
     const myTrie = new Trie();
     ['frodo', 'front', 'frost', 'frozen', 'frame', 'kakao'].forEach((word) => {
-      myTrie.add(word, 0);
+      myTrie.add(word);
     });
 
     expect(myTrie.getTotal('fro??')).toBe(4);
