@@ -1,27 +1,14 @@
 const solution = (newId) => {
-  return deduplication(
-    sliceId(
-      newId
-        .toLowerCase()
-        .replace(/[~!@#$%^&*()=+\[{\]}:?,<>/A-Z]/g, '')
-        .replace(/\.{2,}/g, '.')
-        .replace(/^\.|\.$/g, '')
-    )
-  );
-};
+  const id = newId
+    .toLowerCase()
+    .replace(/[^\w\d-_.]/g, '')
+    .replace(/\.{2,}/g, '.')
+    .replace(/^\.|\.$/g, '')
+    .padEnd(1, 'a')
+    .slice(0, 15)
+    .replace(/^\.|\.$/g, '');
 
-const sliceId = (id) => {
-  if (id.length === 0) {
-    return 'a';
-  }
-  return id.slice(0, 15).replace(/^\.|\.$/g, '');
-};
-
-const deduplication = (id) => {
-  while (id.length <= 2) {
-    id += id[id.length - 1];
-  }
-  return id;
+  return id.padEnd(3, id[id.length - 1]);
 };
 
 test('solution', () => {
